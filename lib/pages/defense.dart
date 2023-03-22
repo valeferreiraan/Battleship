@@ -1,45 +1,127 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
-
-
-
 class DefenseScreen extends StatefulWidget {
   @override
   _ButtonGridState createState() => _ButtonGridState();
 }
 
 class _ButtonGridState extends State<DefenseScreen> {
+  int _counterbarcos=0;
+
   List<List<bool>> _buttonStates = List.generate(5, (_) => List.filled(5, false));
 
-  void _toggleButtonState(int row, int col) {
+  void _toggleButtonStateHorizontal(int row, int col) {
     setState(() {
-      _buttonStates[row][col] = !_buttonStates[row][col];
+      if (_counterbarcos<4){
+        if (col != 5){
+          if(!_buttonStates[row][col] && !_buttonStates[row][col+1]){
+            _buttonStates[row][col] = !_buttonStates[row][col];
+            _buttonStates[row][col+1] = !_buttonStates[row][col+1];
+            increase_barcos();
+          } else if(_buttonStates[row][col] && _buttonStates[row][col+1]){
+            _buttonStates[row][col] = !_buttonStates[row][col];
+            _buttonStates[row][col+1] = !_buttonStates[row][col+1];
+            decrease_barcos();
+          }
+        }
+      }
     });
+  }
+
+  void _toggleButtonStateVertical(int row, int col) {
+    setState(() {
+      if (_counterbarcos<4){
+        if (row != 5){
+          if(!_buttonStates[row][col] && !_buttonStates[row+1][col]){
+            _buttonStates[row][col] = !_buttonStates[row][col];
+            _buttonStates[row+1][col] = !_buttonStates[row+1][col];
+            increase_barcos();
+          } else if(_buttonStates[row][col] && _buttonStates[row+1][col]){
+            _buttonStates[row][col] = !_buttonStates[row][col];
+            _buttonStates[row+1][col] = !_buttonStates[row+1][col];
+            decrease_barcos();
+          }
+        }
+      }
+    });
+  }
+
+  void _resetButtonState(){
+    setState(() {
+      for (int i=0; i<5; i++){
+        for (int j=0; j<5; j++){
+          _buttonStates[i][j] = false;
+        }
+      }
+      _counterbarcos=0;
+    });
+  }
+
+  void increase_barcos(){
+    setState(() {_counterbarcos++;});
+    print(_counterbarcos);
+  }
+
+  void decrease_barcos(){
+    setState(() {if (_counterbarcos>0){_counterbarcos--;}});
+    print(_counterbarcos);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Button Grid'),
+        title: Text('Ubique sus barcos'),
       ),
-      body: GridView.builder(
-        itemCount: 25,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
-        itemBuilder: (context, index) {
-          int row = index ~/ 5;
-          int col = index % 5;
-          return ElevatedButton(
-            onPressed: () {
-              _toggleButtonState(row, col);
-              print(_buttonStates);
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: _buttonStates[row][col] ? Colors.green : Colors.grey),
-            child: Text(_buttonStates[row][col] ? 'ON' : 'OFF'),
-          );
-        },
+      body: Container(
+        alignment: Alignment.center,
+        constraints: BoxConstraints.tightForFinite(width: 600),
+        margin: EdgeInsets.symmetric(vertical: 20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(60.0, 0.0, 60.0, 0.0,),
+                child: GridView.builder(
+                  itemCount: 25,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
+                  itemBuilder: (context, index) {
+                    int row = index ~/ 5;
+                    int col = index % 5;
+                    return ElevatedButton(
+                      //con click normal se pone el barco horizontal
+                        onPressed: () {
+                          _toggleButtonStateHorizontal(row, col);
+                          //print(_buttonStates);
+                        },
+                      //con click largo se pone el barco vertical
+                        onLongPress: () {
+                          _toggleButtonStateVertical(row, col);
+                          //print(_buttonStates);
+                        },
+                        style: ElevatedButton.styleFrom(backgroundColor: _buttonStates[row][col] ? Colors.green : Colors.blue),
+                        child: Text(''),
+                      );
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom:40.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(onPressed: (){_resetButtonState();}, child: Text('BORRAR')),
+                  SizedBox(width: 30.0),
+                  ElevatedButton(onPressed: (){_resetButtonState();}, child: Text('LISTO')),
+                ],)
+            ),
+          ],
+        ),
       ),
     );
   }
