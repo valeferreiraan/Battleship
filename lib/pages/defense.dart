@@ -71,9 +71,6 @@ class _ButtonGridState extends State<DefenseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Ubique sus barcos'),
-      ),
       body: Container(
         alignment: Alignment.center,
         constraints: BoxConstraints.tightForFinite(width: 600),
@@ -82,6 +79,13 @@ class _ButtonGridState extends State<DefenseScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Padding(
+                  padding: EdgeInsets.only(left:60.0, bottom: 20.0, right: 60.0),
+                  child: Text('LOCATE YOUR SHIPS', textScaleFactor: 2,
+                    style: GoogleFonts.spaceMono(
+                      textStyle: TextStyle(color: Colors.red, letterSpacing: .8),),
+                    textAlign: TextAlign.center,),
+                    ),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.fromLTRB(60.0, 0.0, 60.0, 0.0,),
@@ -110,14 +114,35 @@ class _ButtonGridState extends State<DefenseScreen> {
               ),
             ),
             Padding(
+                  padding: EdgeInsets.only(left:60.0, bottom: 20.0, right: 60.0),
+                  child: Text('Press fast for horizontal ships, long press for vertical ships', 
+                    style: GoogleFonts.spaceMono(
+                      textStyle: TextStyle(color: Colors.black, letterSpacing: .8),
+                    ),
+                    textAlign: TextAlign.center,),
+                    ),
+            Padding(
               padding: EdgeInsets.only(bottom:40.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(onPressed: (){_resetButtonState();}, child: Text('BORRAR')),
+                  ElevatedButton(onPressed: (){_resetButtonState();}, 
+                    child: Text('DELETE',
+                      style: GoogleFonts.spaceMono(
+                        textStyle: TextStyle(color: Colors.white, letterSpacing: .8),
+                      ),
+                      ),
+                    ),
                   SizedBox(width: 30.0),
-                  ElevatedButton(onPressed: (){_resetButtonState();}, child: Text('LISTO')),
+                  ElevatedButton(onPressed: (){print(_buttonStates);
+                            Navigator.pushNamed(context, '/Attack', arguments: _buttonStates);}, 
+                            child: Text('DONE',
+                                  style: GoogleFonts.spaceMono(
+                                  textStyle: TextStyle(color: Colors.white, letterSpacing: .8),
+                              ),
+                              )
+                            ),
                 ],)
             ),
           ],

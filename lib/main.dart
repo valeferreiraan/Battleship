@@ -1,3 +1,4 @@
+import 'package:batalla_naval/pages/win.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'pages/start.dart';
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => StartScreen(),
         '/Attack': (context) => AttackScreen(),
-        '/Defense': (context) => DefenseScreen()
+        '/Defense': (context) => DefenseScreen(),
+        '/Win': (context) => WinScreen()
       },
       debugShowCheckedModeBanner:false,
     );
